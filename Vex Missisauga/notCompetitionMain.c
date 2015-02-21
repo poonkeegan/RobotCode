@@ -117,6 +117,68 @@ void resetArmForceAdjusts(){
 	rightArmForce = 0;
 }
 
+void autonomous(){
+	//MOVEMENT CODE
+	int height = 2;
+	int red = -1;
+	//go forward till encoder hits
+	motor[backLeft] = 127;
+	motor[backRight] = 127;
+	motor[frontLeft] = 127;
+	motor[frontRight] = 127;
+	wait1Msec(750);
+	//stops robot
+	motor[backLeft] = 0;
+	motor[backRight] = 0;
+	motor[frontLeft] = 0;
+	motor[frontRight] = 0;
+	//picks up cube
+	motor[intake] = 127;
+	wait1Msec(500);
+	motor[intake] = 0;
+	//turns left toward pole
+	motor[backLeft] =   red*100;
+	motor[backRight] =   red*-100;
+	motor[frontLeft] =  red*100;
+	motor[frontRight] =  red*-100;
+	wait1Msec(400);
+	//stops robot
+	motor[backLeft] = 0;
+	motor[backRight] = 0;
+	motor[frontLeft] = 0;
+	motor[frontRight] = 0;
+	//moves arm up till medium pole height
+	while(SensorValue[potLeft] > 1000*height || SensorValue[potRight] > 1000*height){
+		motor[topRightArm] = 127;
+		motor[bottomLeftArm] = 127;
+		motor[topLeftArm] = 127;
+		motor[bottomRightArm] = 127;
+	}//EDIT POT VALUES BEFORE TESTING
+
+	//stops robot
+	motor[topRightArm] =  0;
+	motor[bottomLeftArm] = 0;
+	motor[topLeftArm] =  0;
+	motor[bottomRightArm] =  0;
+
+	//go forward toward pole
+	motor[backLeft] = 127;
+	motor[backRight] = 127;
+	motor[frontLeft] = 127;
+	motor[frontRight] = 127;
+	wait1Msec(400);
+	//stops robot
+	motor[backLeft] = 0;
+	motor[backRight] = 0;
+	motor[frontLeft] = 0;
+	motor[frontRight] = 0;
+
+	//drops off cube
+	motor[intake] = -127;
+	wait1Msec(700);
+	// stops intake
+	motor[intake] = 0;
+}
 
 
 task main()
@@ -185,10 +247,6 @@ task main()
 			armDirection(0);
 		}
 
-
-	 // if(vexRT[Btn8R] == 1){
-	 // 	automation = !automation;
-	 // }
 		if(vexRT[Btn7L] == 1){
 	  	clawDir(1);
 	  	//open
